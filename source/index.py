@@ -91,3 +91,4 @@ if __name__ == '__main__':
 
     while True:
         schedule.every(1).hours.do(get_covid19_tweets)
+        time.sleep(60)
