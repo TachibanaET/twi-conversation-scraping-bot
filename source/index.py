@@ -1,5 +1,5 @@
 import datetime
-import json
+import logging
 import os
 import time
 
@@ -8,6 +8,9 @@ import schedule
 from file import FileClass
 from network import NetworkClass
 from utility import UtilityClass
+
+logging.basicConfig(level=logging.INFO, format=' %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 BEARER_TOKEN = os.environ['BEARER_TOKEN']
 proxies = {
@@ -41,6 +44,7 @@ utility = UtilityClass()
 
 
 def get_covid19_tweets() -> None:
+    logger.info('get covid19 tweets - start')
     save_path = '/workspace/default_save_dir/covid-19'
     file = FileClass(save_path)
 
@@ -73,22 +77,24 @@ def get_covid19_tweets() -> None:
     for idx, tweets in conversation_tweets.items():
         conversation_tweets[idx] = utility.clean_new_line_char(tweets=tweets)
 
+    dir_name = f'{start_utc.year}-{start_utc.month}-{start_utc.day}T{start_utc.hour}'
     file.save_tweets(
         tweets_type='single',
-        dir_name=start_time,
+        dir_name=dir_name,
         tweets=single_tweets)
     file.save_tweets(
         tweets_type='conversation',
-        dir_name=start_time,
+        dir_name=dir_name,
         tweets=conversation_tweets)
 
     time.sleep(3)
-    file.make_archive_and_clean_up(dir_name=start_time)
+    file.make_archive_and_clean_up(dir_name=dir_name)
+    logger.info('get covid19 tweets - done')
 
 
 if __name__ == '__main__':
-    # get_covid19_tweets()
+    schedule.every(1).hours.do(get_covid19_tweets)
 
     while True:
-        schedule.every(1).hours.do(get_covid19_tweets)
-        time.sleep(60)
+        schedule.run_pending()
+        time.sleep(1)

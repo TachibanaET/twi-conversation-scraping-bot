@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from logging import getLogger
 
 import requests
@@ -22,6 +23,7 @@ class NetworkClass():
         self.proxies = proxies
 
     def connect_to_endpoint(self, url: str) -> dict:
+        time.sleep(1)
         response = requests.request(
             "GET", url, headers=self.headers, proxies=self.proxies)
         if response.status_code != 200:

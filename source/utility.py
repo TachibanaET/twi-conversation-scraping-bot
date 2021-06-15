@@ -12,7 +12,6 @@ class UtilityClass():
 
     def clean_new_line_char(self, tweets: list) -> list:
         for idx, tweet in enumerate(tweets):
-            print(tweet)
             tweets[idx]['text'] = tweet['text'].replace('\n', '')
 
         return tweets

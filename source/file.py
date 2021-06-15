@@ -32,6 +32,5 @@ class FileClass():
 
     def make_archive_and_clean_up(self, dir_name: str) -> None:
         file_path = os.path.join(self.save_path, dir_name)
-        shutil.make_archive(file_path, 'tar')
+        shutil.make_archive(file_path, 'tar', root_dir=file_path)
         shutil.rmtree(file_path)
-        os.rmdir(file_path)
