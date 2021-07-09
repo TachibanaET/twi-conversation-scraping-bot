@@ -96,7 +96,11 @@ class NetworkClass():
 
         endpoint_url = f'https://api.twitter.com/2/tweets/{conversation_id}?tweet.fields={formatted_tweet_fields}'
         json_response = self.connect_to_endpoint(endpoint_url)
-        return json_response['data']
+        try:
+            return json_response['data']
+        except Exception as e:
+            logger.exception(e)
+            return ''
 
     def get_conversation_tweets(
             self,
@@ -105,11 +109,14 @@ class NetworkClass():
             max_results: int) -> dict:
         conversation_tweets = {}
         for conversation_id in conversation_ids:
+            logger.info(f'get conversation : {conversation_id}')
             try:
                 # root tweet
                 root_tweet = self._get_root_tweet(
                     conversation_id=conversation_id,
                     tweet_fields=tweet_fields)
+                if root_tweet == '':
+                    continue
                 conversation_tweets[conversation_id] = []
                 conversation_tweets[conversation_id].append(root_tweet)
 
