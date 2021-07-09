@@ -142,7 +142,7 @@ def get_random_tweets():
 
 if __name__ == '__main__':
     schedule.every(1).hours.do(get_covid19_tweets)
-    schedule.every(15).minutes.do(get_covid19_tweets)
+    schedule.every(15).minutes.do(get_random_tweets)
     while True:
         schedule.run_pending()
         time.sleep(1)
