@@ -101,10 +101,12 @@ def get_random_tweets():
     save_path = '/data/random-choice'
     file = FileClass(save_path)
 
-    now_utc = datetime.datetime.utcnow() - datetime.timedelta(minutes=1)
-    start_utc = now_utc - datetime.timedelta(minutes=15)
+    now_utc = datetime.datetime.utcnow()
+    end_utc = now_utc - datetime.timedelta(minutes=2)
+    start_utc = end_utc - datetime.timedelta(minutes=15)
+
     start_time = f'{start_utc.year}-{start_utc.month}-{start_utc.day}T{start_utc.hour}:{start_utc.minute}:00.000Z'
-    end_time = f'{now_utc.year}-{now_utc.month}-{now_utc.day}T{now_utc.hour}:{now_utc.minute}:00.000Z'
+    end_time = f'{end_utc.year}-{end_utc.month}-{end_utc.day}T{end_utc.hour}:{end_utc.minute}:00.000Z'
 
     query = f'{random.choice(jp_character)}&start_time={start_time}&end_time={end_time}'
     logger.info(query)
