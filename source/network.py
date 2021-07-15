@@ -132,13 +132,17 @@ class NetworkClass():
                 max_results=max_results
             )
             json_response = self.connect_to_endpoint(endpoint_url)
-            reply_tweets = json_response['data']
+            try:
+                reply_tweets = json_response['data']
 
-            for rep in reversed(reply_tweets):
-                tmp_rep = rep
-                for i in rep['referenced_tweets']:
-                    if i['type'] == 'replied_to':
-                        tmp_rep['reply_to_id'] = i['id']
-                conversation_tweets[conversation_id].append(tmp_rep)
+                for rep in reversed(reply_tweets):
+                    tmp_rep = rep
+                    for i in rep['referenced_tweets']:
+                        if i['type'] == 'replied_to':
+                            tmp_rep['reply_to_id'] = i['id']
+                    conversation_tweets[conversation_id].append(tmp_rep)
+            except Exception as e:
+                logger.exception(e)
+                continue
 
         return conversation_tweets
